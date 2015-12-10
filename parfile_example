@@ -1,0 +1,28 @@
+- fit_gaussian_to_echelle1
+  - centerwl_guess : 6563  # will this fail b/c it's an integer?  Or do we allow auto-casting to float when it makes sense?
+  - sig_guess : 15.
+  - amp_guess : 1.
+  - echelle_order : 5
+  
+# twice means just run it a second time but with different parameters
+- fit_gaussian_to_echelle1
+  - centerwl_guess : 6563  # will this fail b/c it's an integer?  Or do we allow auto-casting to float when it makes sense?
+  - sig_guess : 15.
+  - amp_guess : 1.
+  - echelle_order : 6
+  
+- fit_gaussian_to_echelle2
+  - centerwl_guess : 6563.
+  # can we get away with just that, b/c the function has defaults?  Or do we require that everything have a parameter
+  # and only use the defaults when auto-creating?
+  
+#fit_gaussian_to_echelle3 should be identical to 2
+
+- fit_gaussian_to_echelle_Q1
+  - centerwl_guess : Quantity
+    - value : 6563.
+    - unit : angstrom
+  
+  # or can we get away with just this?:
+- fit_gaussian_to_echelle_Q2
+  - centerwl_guess : 6563 angstrom

@@ -43,16 +43,23 @@ def _build_schema(func, *args, **kwargs):
             raise ValueError('Keyword {} is not an argument of the schema function'.format(kw))
         nametotype[kw] = val
 
-    schemamap[f] = Schema(nametotype)
+    schemamap[func] = Schema(nametotype)
 
-    return f
+    return func
 
 
 class Parset(object):
-    def __init__(self, valdict, schema):
-        self.schema = schema
-        schema.validate(valdict)
-        self.valdict = vald {ct
+    def __init__(self, parfile, schema, target=None):
+        self.target = target
+        if hasattr(schema, 'validate'):
+            self.schema = schema
+        else:
+            self.schema = schemamap[schema]
+            if self.target is None:
+                self.target = schema
+
+        self._valdict = {}
+        self.valdict = from_yaml(parfile)
 
     @property
     def valdict(self):
@@ -70,3 +77,22 @@ class Parset(object):
             setattr(self, nm, val)
         self._valnames = list(invaldict.keys())
 
+    def engage(self):
+        self.schema.validate(self.valdict)
+        self.target(**self.valdict)
+
+
+def from_yaml(filename):
+    """
+    TEMPORARY
+    """
+    valdict = {}
+    with open(filename) as f:
+        for l in f:
+            k, v = l.split(':')
+            try:
+                valdict[k.strip()] = float(v.strip())
+            except ValueError:
+                valdict[k.strip()] = v.strip()
+
+    return valdict
